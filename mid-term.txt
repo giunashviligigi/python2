@@ -1,0 +1,111 @@
+class Bank_Account():
+    def __init__(self, account_name, balance=0):
+        self.__account_name = account_name
+        self.__balance = balance
+
+    def get_account_name(self):
+        return self.__account_name
+
+    def set_account_name(self, new_name):
+        self.__account_name = new_name
+
+    def get_balance(self):
+        return self.__balance
+
+    def set_balance(self, new_balance):
+        self.__balance = new_balance
+
+    def deposit(self, amount):
+        self.__balance += amount
+        print(f"თანხის შეტანა შესრულებულია. ამჟამად თქვენ ანგარიშზე გაქვთ {self.__balance} ლარი")
+
+    def withdraw(self, amount):
+        if amount > self.__balance:
+            print("თანხის გამოტანა შეუძლებელია. თქვენს ანგარიშზე არსებული თანხა ნაკლებია გადასახადებაზე.")
+        else:
+            self.__balance -= amount
+            print(f"თანხის გამოტანა შესრულებულია. ამჟამად თქვენ ანგარიშზე გაქვთ {self.__balance} ლარი.")
+
+
+my_account = Bank_Account("John Doe", 1000)
+my_account.withdraw(500)
+
+______________________________________________________________________________________________________________
+
+import math
+
+
+class Fraction:
+    def __init__(self, top, bottom):
+        self.top = top
+        self.bottom = bottom
+
+    def __str__(self):
+        return f'{self.top}/{self.bottom}'
+
+    def inverse(self):
+        return f'{self.bottom}/{self.top}'
+
+    def __add__(self, other):
+        if isinstance(other, Fraction):
+            denominator = math.lcm(self.bottom, other.bottom)
+            first = denominator / self.bottom * self.top
+            second = denominator / other.bottom * other.top
+            nominator = first + second
+            return f'{int(nominator)}/{denominator}'
+
+
+a1 = Fraction(3, 5)
+a2 = Fraction(2, 3)
+
+a3 = a1 + a2
+print(a3)
+print(a1.inverse())
+
+___________________________________________________________________________________________________________________
+
+import sqlite3
+conn = sqlite3.connect('test.db')
+cursor = conn.cursor()
+
+cursor.execute('''CREATE TABLE sia(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name VARCHAR(20),
+                surname VARCHAR(20),
+                age INT
+                ) ''')
+
+cursor.execute('''INSERT INTO sia(name,surname,age)
+               VALUES (?,?,?) ''', ("lukicha","karzhalovi",18)
+                )
+cursor.execute('''INSERT INTO sia(name,surname,age)
+               VALUES (?,?,?) ''', ("gigi","giunashvili",19)
+                )
+cursor.execute('''INSERT INTO sia(name,surname,age)
+               VALUES (?,?,?) ''', ("vano","paxouisti",24)
+                )
+
+cursror.execute(''' UPDATE sia SET age=20 WHERE age<21 ''')
+cursor.execute('DELETE FROM sia')
+
+cursor.execute('SELECT * FROM sia WHERE age >= 19')
+for i in cursor:
+    print(i)
+
+cursor.execute('SELECT * FROM sia WHERE age >= ?',(19,))
+for i in cursor:
+    print(i)
+
+cursor.execute('SELECT * FROM sia')
+print(cursor.fetchone())
+print(cursor.fetchmany(3))
+print(cursor.fetchall())
+
+
+res = cursor.execute('SELECT * FROM sia')
+for i in res:
+    print(i)
+
+
+conn.commit()
+conn.close()
